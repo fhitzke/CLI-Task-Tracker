@@ -17,11 +17,13 @@ class TaskTracker:
             self.database = {}
             with open(self.directory, "w") as write_file:
                 json.dump(self.database, write_file)
-            print(f"Task registry created.")
         else:
             with open(self.directory, "r") as read_file:
                 self.database = json.load(read_file)
-            self.unique_id = int(list(self.database.keys())[-1])
+            if  len(self.database) == 0:
+                self.unique_id = 0
+            else:
+                self.unique_id = int(list(self.database.keys())[-1]) + 1
             self.tasks = [
                 Task(**{
                     **t,
@@ -29,7 +31,6 @@ class TaskTracker:
                     "updatedAt": datetime.datetime.strptime(t["updatedAt"], "%a %d %b %Y, %H:%M"),
                 }) for t in self.database.values()
             ]
-            print(f"Task registry loaded.\n")
 
     @staticmethod
     def _format_datetime(date: datetime.datetime) -> str:
@@ -58,13 +59,12 @@ class TaskTracker:
         task_id: int = self.unique_id
         task = Task(id=task_id, description=description)
         self.tasks.append(task)
-        # build/update the database dict 
         self.database[task_id] = asdict(task)
-        self.unique_id += 1
+        # self.unique_id += 1
         self.save()
         return f"Task added successfully (ID: {task_id})"
 
-    def update(self, id: int, description: str) -> None:
+    def update(self, id: int, description: str) -> str:
         if description.strip() == "":
             raise ValueError(f"Description must not be empty.")
         task = self.get_task(id)[1]
@@ -72,21 +72,24 @@ class TaskTracker:
         task.updatedAt = self._format_datetime(datetime.datetime.now())
         self.database[str(task.id)] = asdict(task)
         self.save()
+        return f"Description of Task ({task.id}) updated to: \"{task.description}\""
 
-    def delete(self, id: int) -> None:
+    def delete(self, id: int) -> str:
         task = self.get_task(id)
         self.tasks.pop(task[0])
         del self.database[str(task[1].id)]
         self.save()
+        return f"Removed Task ({task[1].id}): \"{task[1].description}\""
 
-    def change_status(self, id: int, status: str) -> None:
+    def change_status(self, id: int, status: str) -> str:
         if status not in ["in-progress", "done"]:
-            raise ValueError(f"Status must be either of (\"in-progress\", \"done\").")
+            raise ValueError(f"Status must be either of (\"in-progress\", \"done\").") # TODO: graceful handling
         task = self.get_task(id)[1]
         task.status = status
         task.updatedAt = self._format_datetime(datetime.datetime.now())
         self.database[str(task.id)] = asdict(task)
         self.save()
+        return f"Status of Task ({task.id}): \"{task.description}\" changed to: \"{task.status}\""
 
     def list(self, status: str = "all") -> str:
         if status in ["done", "todo", "in-progress"]:
