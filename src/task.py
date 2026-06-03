@@ -13,5 +13,6 @@ class Task:
         return f"Task ({self.id}): \"{self.description}\" | Status: \"{self.status}\" | Updated: \"{self.updatedAt}\""
     
     def __post_init__(self):
+        self.status = "todo"
         self.updatedAt = self.updatedAt.strftime("%a %d %b %Y, %H:%M")
         self.createdAt = self.createdAt.strftime("%a %d %b %Y, %H:%M")

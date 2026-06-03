@@ -1,4 +1,6 @@
 .venv/
 src/__pycache__/
+tests/__pycache__/
+*.egg-info
 task.md
 tasks.json

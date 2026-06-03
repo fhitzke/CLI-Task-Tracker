@@ -44,6 +44,14 @@ class TaskTracker:
             raise OSError(f"Failed to write file: {e}")
         except TypeError as e:
             raise TypeError(f"Database contains non-serializable data: {e}")
+        
+    def purge_task_registry(self) -> None:
+        try:
+            self.database = {}
+            with open(self.directory, "w") as write_file:
+                json.dump(self.database, write_file)
+        except OSError as e:
+            raise OSError(f"Failed to write file: {e}")
     
     def get_task(self, id: int) -> Tuple[int, Task]:
         ids: List[int] = [task.id for task in self.tasks]
@@ -59,8 +67,12 @@ class TaskTracker:
         task_id: int = self.unique_id
         task = Task(id=task_id, description=description)
         self.tasks.append(task)
-        self.database[task_id] = asdict(task)
-        # self.unique_id += 1
+        self.database[str(task_id)] = asdict(task)
+        self.unique_id += 1
+        # NOTE: unique_id is incremented here so that multiple calls to add()
+        # within the same session assign unique IDs.
+        # The CLI only calls add() once per process, so __post_init__ alone would suffice
+        # but tests reuse the same tracker instance.
         self.save()
         return f"Task added successfully (ID: {task_id})"
 
