@@ -12,7 +12,7 @@ class TaskTracker:
     tasks: List[Task] = field(default_factory=list)
     database: dict = field(default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.directory.exists():
             self.database = {}
             with open(self.directory, "w") as write_file:
@@ -105,10 +105,10 @@ class TaskTracker:
 
     def list(self, status: str = "all") -> str:
         if status in ["done", "todo", "in-progress"]:
-            tasks = [task for task in self.tasks if task.status == status]
+            filtered_tasks: List[Task] = [task for task in self.tasks if task.status == status]
         else:
-            tasks = self.tasks
-        return "\n".join(repr(task) for task in tasks)
+            filtered_tasks = self.tasks
+        return "\n".join(repr(task) for task in filtered_tasks)
     
 
 

@@ -2,7 +2,7 @@ from src.task import Task
 from src.cli_task_tracker import TaskTracker
 import argparse
 
-def main():
+def main() -> None:
     task_tracker = TaskTracker()
     parser = argparse.ArgumentParser(description="A simple CLI Task Tracker application")
     subparsers = parser.add_subparsers(dest="command", required=True, help="task commands")

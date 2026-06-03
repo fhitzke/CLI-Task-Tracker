@@ -9,10 +9,10 @@ class Task:
     createdAt: datetime.datetime = field(default_factory=datetime.datetime.now)
     updatedAt: datetime.datetime = field(default_factory=datetime.datetime.now)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Task ({self.id}): \"{self.description}\" | Status: \"{self.status}\" | Updated: \"{self.updatedAt}\""
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.status = "todo"
         self.updatedAt = self.updatedAt.strftime("%a %d %b %Y, %H:%M")
         self.createdAt = self.createdAt.strftime("%a %d %b %Y, %H:%M")
