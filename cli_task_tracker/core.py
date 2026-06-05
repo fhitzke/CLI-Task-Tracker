@@ -1,5 +1,5 @@
-from src.task import Task
-from src.cli_task_tracker import TaskTracker
+from cli_task_tracker.task import Task
+from cli_task_tracker.cli_task_tracker import TaskTracker
 import argparse
 
 def main() -> None:

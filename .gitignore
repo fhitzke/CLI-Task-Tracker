@@ -1,5 +1,5 @@
 .venv/
-src/__pycache__/
+cli_task_tracker/__pycache__/
 tests/__pycache__/
 *.egg-info
 task.md

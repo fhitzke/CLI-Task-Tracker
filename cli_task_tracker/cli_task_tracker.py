@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from src.task import Task
+from cli_task_tracker.task import Task
 from typing import List, Tuple
 from pathlib import Path
 import datetime
