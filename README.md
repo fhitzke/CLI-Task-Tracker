@@ -55,7 +55,7 @@ task-tracker list "done"
 
 ```
 CLI-Task-Tracker/
-├── src/
+├── cli_task_tracker/
 │   ├── __init__.py
 │   ├── core.py           # CLI entry point and argument parsing
 │   ├── cli_task_tracker.py  # TaskTracker dataclass and business logic
@@ -82,6 +82,6 @@ Note: tests require an empty or non-existent `tasks.json` file to run correctly.
 ## Design Principles
 
 - **Typing**: Every function and method is fully annotated using `typing` and `dataclasses`
-- **Persistence**: Tasks are stored in a JSON file and fully restored on initialization, including datetime deserialisation
+- **Persistence**: Tasks are stored in a JSON file and fully restored on initialization, including datetime deserialization
 - **Separation of concerns**: CLI parsing, business logic, and data modelling are split across distinct modules
 - **Testability**: The classes `TaskTracker` and `Task` are independently instantiable and testable without invoking the CLI
